@@ -2,7 +2,10 @@
 #include <GL/freeglut.h>								// добавили библиотеку
 
 void RenderSceneCB() {									// функци€ дл€ обратного вызова
-
+	
+	glClear(GL_COLOR_BUFFER_BIT);						// очистили буфер кадра, использу€ заданный цвет
+	//glClear(GL_COLOR_ARRAY_TYPE);						// попытка использовани€ другого цвета
+	glutSwapBuffers();									// помен€ли местами фоновый буфер и буфер кадра
 }
 
 int main(int argc, char** argv) {
