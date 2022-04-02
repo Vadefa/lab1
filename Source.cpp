@@ -19,4 +19,10 @@ int main(int argc, char** argv) {
 	
 
 	glutDisplayFunc(RenderSceneCB);						// функция, где мы будем отрисовывать один кадр
+
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// установили цвет, который будет использован во время след. очистки буфера кадра
+			//	 red   green blue alpha-channel
+
+
 }
