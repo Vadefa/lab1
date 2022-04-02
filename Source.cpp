@@ -1,34 +1,46 @@
 #include <iostream>
-#include <GL/freeglut.h>								// добавили библиотеку
+#include <GL/glew.h>									// подключили заголовок CLEW - раньше других заголовков OpenGL
+#include <GL/freeglut.h>
 
-void RenderSceneCB() {									// функци€ дл€ обратного вызова
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+
+void RenderSceneCB() {
 	
-	//glClear(GL_COLOR_BUFFER_BIT);						// очистили буфер кадра, использу€ заданный цвет
-	glClear(GL_COLOR_ARRAY);							// сменили цвет очистки буфера кадра
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_ARRAY);
 
-	glutSwapBuffers();									// помен€ли местами фоновый буфер и буфер кадра
+	glutSwapBuffers();
 }
 
 int main(int argc, char** argv) {
+	glutInit(&argc, argv);
+
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+
+	glutInitWindowSize(1024, 768);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow("Tutorial 01");
 	
-	glutInit(&argc, argv);								// инициализировали glut
+	glutDisplayFunc(RenderSceneCB);
 
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);		// настрили опции: двойную буферизацию и буфер цвета
+	glutMainLoop();
 
+	//////////LESSON 2
 
-	glutInitWindowSize(1024, 768);						// установили размер окна 1024 на 768 пикселей
-	glutInitWindowPosition(100, 100);					// установили позицию на экране
-	glutCreateWindow("Tutorial 01");					// заголовок окна
+	GLenum res = glewInit();						// инициализирование GLEW
+	if (res != GLEW_OK)								// проверка на ошибки
+	{
+		fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+		return 1;
+	}
 	
-
-	glutDisplayFunc(RenderSceneCB);						// функци€, где мы будем отрисовывать один кадр
-
-
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// установили цвет, который будет использован во врем€ след. очистки буфера кадра
-			//	 red   green blue alpha-channel
-
-	glutMainLoop();										// отдали контроль глюту, и он передаст их в функцию обратного вызова RenderSceneCB
-
-
+	glm::vec3 vec = glm::vec3(0.0f, 0.0f, 0.0f);
+	
+	//Vector3f Vertices[1];
+	//Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
 }
