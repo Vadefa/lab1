@@ -24,5 +24,7 @@ int main(int argc, char** argv) {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// установили цвет, который будет использован во время след. очистки буфера кадра
 			//	 red   green blue alpha-channel
 
+	glutMainLoop();										// отдали контроль глюту, и он передаст их в функцию обратного вызова RenderSceneCB
+
 
 }
