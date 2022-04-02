@@ -10,12 +10,10 @@ GLuint VBO;
 
 void RenderSceneCB() {
 	
-	//glClear(GL_COLOR_BUFFER_BIT);
-	glClear(GL_COLOR_ARRAY);
-
-	glutSwapBuffers();
-
+	glClear(GL_COLOR_BUFFER_BIT);
+	
 	/////lesson 2
+	glEnableVertexAttribArray(0);					// задали нулевую связь между координатами вершин и параметрами шейдера
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);				// обратно привязали буфер для отрисовки
 
@@ -25,7 +23,12 @@ void RenderSceneCB() {
 	*/
 
 	glDrawArrays(GL_POINTS, 0, 1);					// (порядковая) функция для отрисовки: точки, индекс первой вершины	и их количество
+
+	glDisableVertexAttribArray(0);					// отключили каждый атрибут вершины
+
+	glutSwapBuffers();								// и поменяли фоновый буфер и буфер кадра местами
 }
+
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -40,7 +43,7 @@ int main(int argc, char** argv) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glutMainLoop();
+	//glutMainLoop();
 
 	/////////////////////////////////////////////////////LESSON 2////////////////////////////////////////////////////
 
@@ -57,10 +60,6 @@ int main(int argc, char** argv) {
 	//Vector3f Vertices[1];
 	//Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
 
-	
-	//GLuint VBO;										/* инициализировали глобальную переменную для хранения указателя (впоследстви
-	//												*	укажем, что указатель будет на буфер вершин)*/
-	// сделал её действительно глобальной...
 
 	glGenBuffers(1, &VBO);							// определили функцию для генерации объектов-переменных
 	// кол-во объектов для создания и ссылка на массив GLuints для хранения указателя на данные 
@@ -68,11 +67,8 @@ int main(int argc, char** argv) {
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);				// задали, что буфер будет хранить массив вершин
 
-	glBufferData(GL_ARRAY_BUFFER,	sizeof(vecArr),		vecArr,			GL_STATIC_DRAW);	/* наполнили объект данными:
-				 название цели		размер данных (б)	адрес массива	флаг использования паттернов: без изменений значений буфера
-																							*/
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vecArr), vecArr, GL_STATIC_DRAW);	/* наполнили объект данными:
+	название цели, размер данных(байт), адрес массива, флаг использования паттернов: без изменений значений буфера */
+	glutMainLoop();
 
-	glEnableVertexAttribArray(0);					// задали нулевую связь между координатами вершин и параметрами шейдера
-
-	glDisableVertexAttribArray(0);					// отключили каждый атрибут вершины
 }
