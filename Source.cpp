@@ -74,4 +74,5 @@ int main(int argc, char** argv) {
 
 	glEnableVertexAttribArray(0);					// задали нулевую связь между координатами вершин и параметрами шейдера
 
+	glDisableVertexAttribArray(0);					// отключили каждый атрибут вершины
 }
