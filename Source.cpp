@@ -1,6 +1,10 @@
 #include <iostream>
 #include <GL/freeglut.h>								// добавили библиотеку
 
+void RenderSceneCB() {									// функция для обратного вызова
+
+}
+
 int main(int argc, char** argv) {
 	
 	glutInit(&argc, argv);								// инициализировали glut
@@ -13,4 +17,6 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(100, 100);					// установили позицию на экране
 	glutCreateWindow("Tutorial 01");					// заголовок окна
 	
+
+	glutDisplayFunc(RenderSceneCB);						// функция, где мы будем отрисовывать один кадр
 }
