@@ -3,8 +3,9 @@
 
 void RenderSceneCB() {									// функци€ дл€ обратного вызова
 	
-	glClear(GL_COLOR_BUFFER_BIT);						// очистили буфер кадра, использу€ заданный цвет
-	//glClear(GL_COLOR_ARRAY_TYPE);						// попытка использовани€ другого цвета
+	//glClear(GL_COLOR_BUFFER_BIT);						// очистили буфер кадра, использу€ заданный цвет
+	glClear(GL_COLOR_ARRAY);							// сменили цвет очистки буфера кадра
+
 	glutSwapBuffers();									// помен€ли местами фоновый буфер и буфер кадра
 }
 
