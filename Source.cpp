@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+GLuint VBO;
 
 void RenderSceneCB() {
 	
@@ -13,6 +14,10 @@ void RenderSceneCB() {
 	glClear(GL_COLOR_ARRAY);
 
 	glutSwapBuffers();
+
+	/////lesson 2
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);				// обратно привязали буфер для отрисовки
 }
 
 int main(int argc, char** argv) {
@@ -30,7 +35,7 @@ int main(int argc, char** argv) {
 
 	glutMainLoop();
 
-	//////////LESSON 2
+	/////////////////////////////////////////////////////LESSON 2////////////////////////////////////////////////////
 
 	GLenum res = glewInit();						// инициализирование GLEW
 	if (res != GLEW_OK)								// проверка на ошибки
@@ -46,8 +51,9 @@ int main(int argc, char** argv) {
 	//Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
 
 	
-	GLuint VBO;										/* инициализировали глобальную переменную для хранения указателя (впоследстви
-													*	укажем, что указатель будет на буфер вершин)*/
+	//GLuint VBO;										/* инициализировали глобальную переменную для хранения указателя (впоследстви
+	//												*	укажем, что указатель будет на буфер вершин)*/
+	// сделал её действительно глобальной...
 
 	glGenBuffers(1, &VBO);							// определили функцию для генерации объектов-переменных
 	// кол-во объектов для создания и ссылка на массив GLuints для хранения указателя на данные 
@@ -60,4 +66,5 @@ int main(int argc, char** argv) {
 																							*/
 
 	glEnableVertexAttribArray(0);					// задали нулевую связь между координатами вершин и параметрами шейдера
+
 }
