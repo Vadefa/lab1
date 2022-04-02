@@ -15,14 +15,14 @@ void RenderSceneCB() {
 	/////lesson 2
 	glEnableVertexAttribArray(0);					// задали нулевую связь между координатами вершин и параметрами шейдера
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);				// обратно привязали буфер для отрисовки
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);			// обратно привязали буфер для отрисовки
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);	// сообщили конвейеру, как он будет воспринимать данные буфера:
 	/* индекс атрибута, количество компонентов в нём (у нас 3 - X, Y и Z), тип компонентов, параметр нормализации атрибута,
 	*  число байт между 2 экземплярами атрибута, смещение в структуре
 	*/
 
-	glDrawArrays(GL_POINTS, 0, 1);					// (порядковая) функция для отрисовки: точки, индекс первой вершины	и их количество
+	glDrawArrays(GL_TRIANGLES, 0, 3);				// (порядковая) функция для отрисовки: точки, индекс первой вершины	и их количество
 
 	glDisableVertexAttribArray(0);					// отключили каждый атрибут вершины
 
@@ -41,11 +41,12 @@ int main(int argc, char** argv) {
 	
 	glutDisplayFunc(RenderSceneCB);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	//glutMainLoop();
 
-	/////////////////////////////////////////////////////LESSON 2////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////lesson 3/////////////////////////////////
 
 	GLenum res = glewInit();						// инициализирование GLEW
 	if (res != GLEW_OK)								// проверка на ошибки
@@ -53,22 +54,17 @@ int main(int argc, char** argv) {
 		fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
 		return 1;
 	}
-	
 
-	glm::vec3 vec = glm::vec3(0.0f, 0.0f, 0.0f);	// инициализировали вектор
-	glm::vec3 vecArr[]{ vec };						// и массив векторов
-	//Vector3f Vertices[1];
-	//Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
+	glm::vec3 vecArrTrngl[3];
+	vecArrTrngl[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
+	vecArrTrngl[1] = glm::vec3(1.0f, -1.0f, 0.0f);
+	vecArrTrngl[2] = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	glGenBuffers(1, &VBO); 
 
-	glGenBuffers(1, &VBO);							// определили функцию для генерации объектов-переменных
-	// кол-во объектов для создания и ссылка на массив GLuints для хранения указателя на данные 
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vecArrTrngl), vecArrTrngl, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);				// задали, что буфер будет хранить массив вершин
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vecArr), vecArr, GL_STATIC_DRAW);	/* наполнили объект данными:
-	название цели, размер данных(байт), адрес массива, флаг использования паттернов: без изменений значений буфера */
-	
-	glutMainLoop();									// передали контроль GLUT
+	glutMainLoop();
 }
