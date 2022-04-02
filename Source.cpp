@@ -69,6 +69,6 @@ int main(int argc, char** argv) {
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vecArr), vecArr, GL_STATIC_DRAW);	/* наполнили объект данными:
 	название цели, размер данных(байт), адрес массива, флаг использования паттернов: без изменений значений буфера */
-	glutMainLoop();
-
+	
+	glutMainLoop();									// передали контроль GLUT
 }
