@@ -39,8 +39,13 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	
-	glm::vec3 vec = glm::vec3(0.0f, 0.0f, 0.0f);
-	
+
+	glm::vec3 vec = glm::vec3(0.0f, 0.0f, 0.0f);	// инициализировали вектор
+	glm::vec3 vecArr[]{ vec };						// и массив векторов
 	//Vector3f Vertices[1];
 	//Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
+
+	
+	GLuint VBO;										/* инициализировали глобальную переменную для хранения указателя (впоследстви
+													*	укажем, что указатель будет на буфер вершин)*/
 }
