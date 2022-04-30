@@ -62,12 +62,12 @@ GLuint createShaderProgram() {
 																c) an array of pointers to strings containing the source code
 																d) an additional parameter we aren't using now
 																*/
-	GLint vertCompiled;
+	GLint vertCompiled;											//3.1) variables for following checking if shaders were compiled and linked
 	GLint fragCompiled;
 	GLint linked;
 
 	glCompileShader(vShader);									//2.4) compiling both shaders
-	checkOpenGLError();
+	checkOpenGLError();											//3.2) checking if the vertex shader was complied
 	glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertCompiled);
 	if (vertCompiled != 1) {
 		cout << "vertex compilation failed" << endl;
@@ -75,7 +75,7 @@ GLuint createShaderProgram() {
 	}
 
 	glCompileShader(fShader);
-	checkOpenGLError();
+	checkOpenGLError();											//3.3) checking if the fragment shader was compiled
 	glGetShaderiv(fShader, GL_COMPILE_STATUS, &fragCompiled);
 	if (fragCompiled != 1) {
 		cout << "fragment compilation failed" << endl;
@@ -86,7 +86,7 @@ GLuint createShaderProgram() {
 	glAttachShader(vfProgram, vShader);							//2.6) attaching shaders to the program object
 	glAttachShader(vfProgram, fShader);
 	glLinkProgram(vfProgram);									//2.7) requesting that the GLSL compiler ensure that shaders are compatible
-	checkOpenGLError();
+	checkOpenGLError();											//3.4) checking if shaders were linked
 	glGetProgramiv(vfProgram, GL_LINK_STATUS, &linked);
 	if (linked != 1) {
 		cout << "linking failed" << endl;
