@@ -44,18 +44,18 @@ bool checkOpenGLError() {
 }
 
 GLuint createShaderProgram() {
-	const char* vshaderSource =									//1) declaring character string vshaderSource: the vertex shader
+	const char* vshaderSource =									//2.1) declaring character string vshaderSource: the vertex shader
 		"#version 430 \n"										//15) indicating OpenGL version
 		"void main(void) \n"
 		"{ gl_Position = vec4(0.0, 0.0, 0.0, 1.0); }";			//16) this variable sets vertex's coordinate position in 3D space (to the origin location); and it being sent next to the pipeline
-	const char* fshaderSource =									//1) declaring character string fshaderSource: the fragment shader
+	const char* fshaderSource =									//2.1) declaring character string fshaderSource: the fragment shader
 		"#version 430 \n"
 		"out vec4 color; \n"									//17) the "out" tag indicates that the variable color is an output
 		"void main(void) \n"
 		"{  if (gl_FragCoord.x < 200) color = vec4(1.0, 0.0, 0.0, 1.0); else color = vec4(0.0, 0.0, 1.0, 1.0); }";
-	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);			//2) generating a shader of type GL_VERTEX_SHADER, initially empty, and returning its id to vShader
-	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);		//2) generating a shader of type GL_FRAGMENT_SHADER, initially empty, and returning its id to fShader
-	glShaderSource(vShader, 1, &vshaderSource, NULL);			//3) loading the GLSL code from strings vshaderSource and fshaderSource into the empty shader objects
+	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);			//2.2) generating a shader of type GL_VERTEX_SHADER, initially empty, and returning its id to vShader
+	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);		//2.2) generating a shader of type GL_FRAGMENT_SHADER, initially empty, and returning its id to fShader
+	glShaderSource(vShader, 1, &vshaderSource, NULL);			//2.3) loading the GLSL code from strings vshaderSource and fshaderSource into the empty shader objects
 	glShaderSource(fShader, 1, &fshaderSource, NULL);			/* parameters of the function: 
 																a) shader object in which to store the shader
 																b) the number of strings in the shader source code
@@ -66,7 +66,7 @@ GLuint createShaderProgram() {
 	GLint fragCompiled;
 	GLint linked;
 
-	glCompileShader(vShader);									//4) compiling both shaders
+	glCompileShader(vShader);									//2.4) compiling both shaders
 	checkOpenGLError();
 	glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertCompiled);
 	if (vertCompiled != 1) {
@@ -82,10 +82,10 @@ GLuint createShaderProgram() {
 		printShaderLog(fShader);
 	}
 
-	GLuint vfProgram = glCreateProgram();						//5) creating a program obect and saving the integer ID that points to it in the vfProgram
-	glAttachShader(vfProgram, vShader);							//6) attaching shaders to the program object
+	GLuint vfProgram = glCreateProgram();						//2.5) creating a program obect and saving the integer ID that points to it in the vfProgram
+	glAttachShader(vfProgram, vShader);							//2.6) attaching shaders to the program object
 	glAttachShader(vfProgram, fShader);
-	glLinkProgram(vfProgram);									//7) requesting that the GLSL compiler ensure that shaders are compatible
+	glLinkProgram(vfProgram);									//2.7) requesting that the GLSL compiler ensure that shaders are compatible
 	checkOpenGLError();
 	glGetProgramiv(vfProgram, GL_LINK_STATUS, &linked);
 	if (linked != 1) {
