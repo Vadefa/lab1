@@ -1,12 +1,27 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <iostream>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
 #define numVAOs 1
 GLuint renderingProgram;
 GLuint vao[numVAOs];
+
+string readShaderSource(const char* filePath) {
+	string content;
+	ifstream fileStream(filePath, ios::in);
+	string line = "";
+
+	while (!fileStream.eof()) {
+		getline(fileStream, line);
+		content.append(line + "\n");
+	}
+	fileStream.close();
+	return content;
+}
 
 void printShaderLog(GLuint shader) {
 	int len = 0;
@@ -44,19 +59,19 @@ bool checkOpenGLError() {
 }
 
 GLuint createShaderProgram() {
-	const char* vshaderSource =									//2.1) declaring character string vshaderSource: the vertex shader
-		"#version 430 \n"										//2.9) indicating OpenGL version
-		"void main(void) \n"
-		"{ gl_Position = vec4(0.0, 0.0, 0.0, 1.0); }";			//2.10) this variable sets vertex's coordinate position in 3D space (to the origin location); and it being sent next to the pipeline
-	const char* fshaderSource =									//2.1) declaring character string fshaderSource: the fragment shader
-		"#version 430 \n"
-		"out vec4 color; \n"									//2.11) the "out" tag indicates that the variable color is an output
-		"void main(void) \n"
-		"{  if (gl_FragCoord.x < 200) color = vec4(1.0, 0.0, 0.0, 1.0); else color = vec4(0.0, 0.0, 1.0, 1.0); }";
 	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);			//2.2) generating a shader of type GL_VERTEX_SHADER, initially empty, and returning its id to vShader
 	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);		//2.2) generating a shader of type GL_FRAGMENT_SHADER, initially empty, and returning its id to fShader
-	glShaderSource(vShader, 1, &vshaderSource, NULL);			//2.3) loading the GLSL code from strings vshaderSource and fshaderSource into the empty shader objects
-	glShaderSource(fShader, 1, &fshaderSource, NULL);			/* parameters of the function: 
+
+	string vertShaderStr = readShaderSource("vertShader.glsl");	//4.1) we can make glsl shaders files using txt files
+	string fragShaderStr = readShaderSource("fragShader.glsl");
+	const char* vertShaderSrc = vertShaderStr.c_str();
+	const char* fragShaderSrc = fragShaderStr.c_str();
+
+
+
+
+	glShaderSource(vShader, 1, &vertShaderSrc, NULL);			//4.2) changed files on files read from txt//2.3) loading the GLSL code from strings vshaderSource and fshaderSource into the empty shader objects
+	glShaderSource(fShader, 1, &fragShaderSrc, NULL);			/* parameters of the function :
 																a) shader object in which to store the shader
 																b) the number of strings in the shader source code
 																c) an array of pointers to strings containing the source code
