@@ -10,6 +10,9 @@ using namespace std;
 GLuint renderingProgram;
 GLuint vao[numVAOs];
 
+float x = 0.0f;											//6.1 location of triangle on x axis
+float inc = 0.01f;										//6.1 offset for moving the triangle
+
 string readShaderSource(const char* filePath) {
 	string content;
 	ifstream fileStream(filePath, ios::in);
@@ -117,9 +120,19 @@ void init(GLFWwindow* window) {
 	glBindVertexArray(vao[0]);									//.. shaders are being used, even if we need to display only one point that does not require any buffers.
 }
 void display(GLFWwindow* window, double currentTime) {
-	glUseProgram(renderingProgram);														//2.8) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)
-	glPointSize(30.0f);																	//2.13) in the rasterizer default points size is 1 pixel. Here we set it to 30 pixels.
-	glDrawArrays(GL_TRIANGLES, 0, 3);													//4.1) displaying a triangle \\2.9) initiating pipline processing - displaying a single point
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);														//6.2) clear the background to black, each time
+	glUseProgram(renderingProgram);														//2.8) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)												
+	x += inc;																			//6.3) move the triangle along x axis
+	if (x > 1.0f) 
+		inc = -0.01f;																	//6.4) switch to moving the triangle to the left
+	if (x < -1.0f)
+		inc = 0.01f;																	//6.5) switch to moving the triangle to the right
+	GLuint offsetLoc = glGetUniformLocation(renderingProgram, "offset");				//6.6) get ptr to "offset"
+	glProgramUniform1f(renderingProgram, offsetLoc, x);									//6.7) send value in "x" to "offset"
+	glDrawArrays(GL_TRIANGLES, 0, 3);													//5.1) displaying a triangle \\2.9) initiating pipline processing - displaying a single point
 }
 
 int main(void) {
