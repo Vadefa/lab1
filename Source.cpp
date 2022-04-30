@@ -1,9 +1,48 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <iostream>
+
+using namespace std;
+
 #define numVAOs 1
 GLuint renderingProgram;
 GLuint vao[numVAOs];
+
+void printShaderLog(GLuint shader) {
+	int len = 0;
+	int chWrittn = 0;
+	char* log;
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
+	if (len > 0) {
+		log = (char*)malloc(len);
+		glGetShaderInfoLog(shader, len, &chWrittn, log);
+		cout << "Shader Info Log: " << log << endl;
+		free(log);
+	}
+}
+void printProgramLog(int prog) {
+	int len = 0;
+	int chWrittn = 0;
+	char* log;
+	glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &len);
+	if (len > 0) {
+		log = (char*)malloc(len);
+		glGetProgramInfoLog(prog, len, &chWrittn, log);
+		cout << "Program Info Log: " << log << endl;
+		free(log);
+	}
+}
+bool checkOpenGLError() {
+	bool foundError = false;
+	int glErr = glGetError();
+	while (glErr != GL_NO_ERROR) {
+		cout << "glError: " << glErr << endl;
+		foundError = true;
+		glErr = glGetError();
+	}
+	return foundError;
+}
+
 GLuint createShaderProgram() {
 	const char* vshaderSource =									//1) declaring character string vshaderSource: the vertex shader
 		"#version 430 \n"										//15) indicating OpenGL version
@@ -23,12 +62,37 @@ GLuint createShaderProgram() {
 																c) an array of pointers to strings containing the source code
 																d) an additional parameter we aren't using now
 																*/
+	GLint vertCompiled;
+	GLint fragCompiled;
+	GLint linked;
+
 	glCompileShader(vShader);									//4) compiling both shaders
+	checkOpenGLError();
+	glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertCompiled);
+	if (vertCompiled != 1) {
+		cout << "vertex compilation failed" << endl;
+		printShaderLog(vShader);
+	}
+
 	glCompileShader(fShader);
+	checkOpenGLError();
+	glGetShaderiv(fShader, GL_COMPILE_STATUS, &fragCompiled);
+	if (fragCompiled != 1) {
+		cout << "fragment compilation failed" << endl;
+		printShaderLog(fShader);
+	}
+
 	GLuint vfProgram = glCreateProgram();						//5) creating a program obect and saving the integer ID that points to it in the vfProgram
 	glAttachShader(vfProgram, vShader);							//6) attaching shaders to the program object
 	glAttachShader(vfProgram, fShader);
 	glLinkProgram(vfProgram);									//7) requesting that the GLSL compiler ensure that shaders are compatible
+	checkOpenGLError();
+	glGetProgramiv(vfProgram, GL_LINK_STATUS, &linked);
+	if (linked != 1) {
+		cout << "linking failed" << endl;
+		printProgramLog(vfProgram);
+	}
+	
 	return vfProgram;
 }
 
@@ -38,26 +102,26 @@ void init(GLFWwindow* window) {
 	glBindVertexArray(vao[0]);									//.. shaders are being used, even if we need to display only one point that does not require any buffers.
 }
 void display(GLFWwindow* window, double currentTime) {
-	glUseProgram(renderingProgram);														//13) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)
+	glUseProgram(renderingProgram);														//1.13) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)
 	glPointSize(30.0f);																	//19) in the rasterizer default points size is 1 pixel. Here we set it to 30 pixels.
-	glDrawArrays(GL_POINTS, 0, 1);														//14) initiating pipline processing - displaying a single point
+	glDrawArrays(GL_POINTS, 0, 1);														//1.14) initiating pipline processing - displaying a single point
 }
 
 int main(void) {
-	if (!glfwInit()) { exit(EXIT_FAILURE); }											//1) initializing the GLFW
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);										//3) machine must be compatible with OpenGL version 4.3
+	if (!glfwInit()) { exit(EXIT_FAILURE); }											//1.1) initializing the GLFW
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);										//1.3) machine must be compatible with OpenGL version 4.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter2 - program1", NULL, NULL);	//2) initializing the GLFW Window and associated OpenGL context; width&height, title, fullscreen mode and resource shading
-	glfwMakeContextCurrent(window);														//5) we need to make the created associated OpenGL context as the current
-	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }									//1) initializing the GLEW
-	glfwSwapInterval(1);																//4) enabling Vectical synchronization (VSync)
+	GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter2 - program1", NULL, NULL);	//1.2) initializing the GLFW Window and associated OpenGL context; width&height, title, fullscreen mode and resource shading
+	glfwMakeContextCurrent(window);														//1.5) we need to make the created associated OpenGL context as the current
+	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }									//1.1) initializing the GLEW
+	glfwSwapInterval(1);																//1.4) enabling Vectical synchronization (VSync)
 	init(window);
 	while (!glfwWindowShouldClose(window)) {
-		display(window, glfwGetTime());													//7) returns elapsed time since GLFW was initialized
-		glfwSwapBuffers(window);														//4) enabling Vectical synchronization (VSync); 6) paints the screen
-		glfwPollEvents();																//6) handles window-related events (such as a key being pressed)
+		display(window, glfwGetTime());													//1.7) returns elapsed time since GLFW was initialized
+		glfwSwapBuffers(window);														//1.4) enabling Vectical synchronization (VSync); 6) paints the screen
+		glfwPollEvents();																//1.6) handles window-related events (such as a key being pressed)
 	}
-	glfwDestroyWindow(window);															//11) destrying the window
-	glfwTerminate();																	//12) terminate the work with the GLFW, destroying all associated elements
+	glfwDestroyWindow(window);															//1.11) destrying the window
+	glfwTerminate();																	//1.12) terminate the work with the GLFW, destroying all associated elements
 	exit(EXIT_SUCCESS);
 }
