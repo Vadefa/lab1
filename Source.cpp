@@ -13,7 +13,7 @@ GLuint createShaderProgram() {
 		"#version 430 \n"
 		"out vec4 color; \n"									//17) the "out" tag indicates that the variable color is an output
 		"void main(void) \n"
-		"{ color = vec4(0.0, 0.0, 1.0, 1.0); }";
+		"{  if (gl_FragCoord.x < 200) color = vec4(1.0, 0.0, 0.0, 1.0); else color = vec4(0.0, 0.0, 1.0, 1.0); }";
 	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);			//2) generating a shader of type GL_VERTEX_SHADER, initially empty, and returning its id to vShader
 	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);		//2) generating a shader of type GL_FRAGMENT_SHADER, initially empty, and returning its id to fShader
 	glShaderSource(vShader, 1, &vshaderSource, NULL);			//3) loading the GLSL code from strings vshaderSource and fshaderSource into the empty shader objects
