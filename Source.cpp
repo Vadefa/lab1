@@ -45,12 +45,12 @@ bool checkOpenGLError() {
 
 GLuint createShaderProgram() {
 	const char* vshaderSource =									//2.1) declaring character string vshaderSource: the vertex shader
-		"#version 430 \n"										//15) indicating OpenGL version
+		"#version 430 \n"										//2.9) indicating OpenGL version
 		"void main(void) \n"
-		"{ gl_Position = vec4(0.0, 0.0, 0.0, 1.0); }";			//16) this variable sets vertex's coordinate position in 3D space (to the origin location); and it being sent next to the pipeline
+		"{ gl_Position = vec4(0.0, 0.0, 0.0, 1.0); }";			//2.10) this variable sets vertex's coordinate position in 3D space (to the origin location); and it being sent next to the pipeline
 	const char* fshaderSource =									//2.1) declaring character string fshaderSource: the fragment shader
 		"#version 430 \n"
-		"out vec4 color; \n"									//17) the "out" tag indicates that the variable color is an output
+		"out vec4 color; \n"									//2.11) the "out" tag indicates that the variable color is an output
 		"void main(void) \n"
 		"{  if (gl_FragCoord.x < 200) color = vec4(1.0, 0.0, 0.0, 1.0); else color = vec4(0.0, 0.0, 1.0, 1.0); }";
 	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);			//2.2) generating a shader of type GL_VERTEX_SHADER, initially empty, and returning its id to vShader
@@ -98,13 +98,13 @@ GLuint createShaderProgram() {
 
 void init(GLFWwindow* window) {
 	renderingProgram = createShaderProgram();
-	glGenVertexArrays(numVAOs, vao);							//18) we will consider it later. Just to know, OpenGL requires that at least one vertex array object be created whenever...
+	glGenVertexArrays(numVAOs, vao);							//2.12) we will consider it later. Just to know, OpenGL requires that at least one vertex array object be created whenever...
 	glBindVertexArray(vao[0]);									//.. shaders are being used, even if we need to display only one point that does not require any buffers.
 }
 void display(GLFWwindow* window, double currentTime) {
-	glUseProgram(renderingProgram);														//1.13) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)
-	glPointSize(30.0f);																	//19) in the rasterizer default points size is 1 pixel. Here we set it to 30 pixels.
-	glDrawArrays(GL_POINTS, 0, 1);														//1.14) initiating pipline processing - displaying a single point
+	glUseProgram(renderingProgram);														//2.8) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)
+	glPointSize(30.0f);																	//2.13) in the rasterizer default points size is 1 pixel. Here we set it to 30 pixels.
+	glDrawArrays(GL_POINTS, 0, 1);														//2.9) initiating pipline processing - displaying a single point
 }
 
 int main(void) {
