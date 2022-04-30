@@ -119,7 +119,7 @@ void init(GLFWwindow* window) {
 void display(GLFWwindow* window, double currentTime) {
 	glUseProgram(renderingProgram);														//2.8) the function loads the program containing the two complied shaders into the OpenGL pipeline stages (onto the GPU)
 	glPointSize(30.0f);																	//2.13) in the rasterizer default points size is 1 pixel. Here we set it to 30 pixels.
-	glDrawArrays(GL_POINTS, 0, 1);														//2.9) initiating pipline processing - displaying a single point
+	glDrawArrays(GL_TRIANGLES, 0, 3);													//4.1) displaying a triangle \\2.9) initiating pipline processing - displaying a single point
 }
 
 int main(void) {
